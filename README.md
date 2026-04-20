@@ -1,23 +1,36 @@
-# atlas_gui
+# atlas_gui (IDETC26-atlas-gui)
 
-GUI for the Design Engineering Atlas knowledge graph.
+GUI for the Design Engineering Atlas knowledge graph. This README is what belongs on the **private GitHub** repo root (flat layout).
 
 ## data contract
 
-Read-only access to ../atlas_pipeline/pipeline_v2/database.db.
-Do not modify the database.
-Do not move the database.
-The pipeline that produced this data lives in ../atlas_pipeline/pipeline_v2/.
+Read-only access to `../atlas_pipeline/pipeline_v2/database.db`.  
+Do not modify or move the database.
 
 ## status
 
-Prototype implemented in `preview.html` (single-file D3, no build step).
-Export pipeline implemented in `export_graph.py`, outputting `graph_data.json`.
-This prototype is a design/interaction reference and not final production app code.
-See `PRD.md` for source-of-truth requirements.
+Prototype: `preview.html` (single-file D3). Export: `export_graph.py` → `graph_data.json`.  
+See `PRD.md` for requirements.
 
-## to start building
+## agent workflow
 
-Read ../ARCHITECTURE.md section 6 first.
-Then read ../atlas_pipeline/pipeline_v2/AUDIT.md for database schema.
-Then validate behavior against `preview.html` + `PRD.md` before scaffolding React.
+1. Read this README, then `PROJECT.md`, then the newest file in `log/`.
+2. One bounded task per session; confirm scope with PI if unclear.
+3. End of session: update `PROJECT.md` and add **one** dated file under `log/` (append-only).
+
+## parent workspace
+
+The full IDETC26 paper project uses `../README.md` and `../PROJECT.md` at the workspace root — not this file.
+
+## pushing to GitHub
+
+The git remote for this GUI expects **atlas** files at the **IDETC26 folder root** (historical layout). Before `git push` to `IDETC26-atlas-gui`, copy from this folder to the parent directory:
+
+```bash
+cd /path/to/IDETC26
+cp atlas_gui/PRD.md atlas_gui/export_graph.py atlas_gui/graph_data.json atlas_gui/preview.html .
+cp atlas_gui/README.md README.md
+```
+
+Then commit and push from `IDETC26` (only those paths are tracked for the atlas remote).  
+Do **not** overwrite parent `PROJECT.md` — it is the full paper `PROJECT.md`.

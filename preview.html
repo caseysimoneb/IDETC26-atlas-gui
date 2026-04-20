@@ -599,6 +599,7 @@
   <div class="tooltip" id="tooltip"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <script src="./graph_data.local.js"></script>
   <script>
     (async function init() {
       const COLORS = {
@@ -651,13 +652,43 @@
 
       let data;
       try {
-        const response = await fetch("./graph_data.json");
-        if (!response.ok) throw new Error("Failed to load graph_data.json");
-        data = await response.json();
+        if (window.location.protocol === "file:" && window.GRAPH_DATA) {
+          data = window.GRAPH_DATA;
+        } else if (window.location.protocol === "file:") {
+          data = await loadLocalJsonViaPicker();
+        } else {
+          const response = await fetch("./graph_data.json");
+          if (!response.ok) throw new Error("Failed to load graph_data.json");
+          data = await response.json();
+        }
       } catch (error) {
-        document.getElementById("app").innerHTML = `<div class="error">${error.message}. Serve atlas_gui via http.server.</div>`;
+        document.getElementById("app").innerHTML = `<div class="error">${error.message}. Use http.server or graph_data.local.js fallback.</div>`;
         console.error(error);
         return;
+      }
+
+      async function loadLocalJsonViaPicker() {
+        return new Promise((resolve, reject) => {
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = ".json,application/json";
+          input.style.display = "none";
+          document.body.appendChild(input);
+          input.addEventListener("change", async () => {
+            try {
+              const file = input.files && input.files[0];
+              if (!file) throw new Error("No file selected");
+              const text = await file.text();
+              const parsed = JSON.parse(text);
+              input.remove();
+              resolve(parsed);
+            } catch (err) {
+              input.remove();
+              reject(err);
+            }
+          });
+          input.click();
+        });
       }
 
       const nodes = data.nodes.map((d) => ({
