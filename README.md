@@ -1,36 +1,61 @@
-# atlas_gui (IDETC26-atlas-gui)
+# Towards an Atlas of Design Problems, Tasks, and Cognitive Constructs in DTM
 
-GUI for the Design Engineering Atlas knowledge graph. This README is what belongs on the **private GitHub** repo root (flat layout).
+This is a working prototype of the Design Engineering Atlas — an interactive knowledge graph of the empirical science-of-design-engineering literature, built in support of a paper currently under review for ASME IDETC 2026.
 
-## data contract
+**[Explore the prototype →](https://caseysimoneb.github.io/IDETC26-atlas-gui/preview.html)**
 
-Read-only access to `../atlas_pipeline/pipeline_v2/database.db`.  
-Do not modify or move the database.
+---
 
-## status
+## About the Atlas
 
-Prototype: `preview.html` (single-file D3). Export: `export_graph.py` → `graph_data.json`.  
-See `PRD.md` for requirements.
+The Design Engineering Atlas maps the structure of the empirical DTM literature as a network of subjects, tasks, problems, and cognitive constructs. Every node is a concept extracted from the literature. Every edge is a co-occurrence — two concepts that appear together across the same papers.
 
-## agent workflow
+The graph was extracted from 36 years of ASME Design Theory and Methodology (DTM) conference proceedings (1989–2025) using a multi-stage LLM pipeline.
 
-1. Read this README, then `PROJECT.md`, then the newest file in `log/`.
-2. One bounded task per session; confirm scope with PI if unclear.
-3. End of session: update `PROJECT.md` and add **one** dated file under `log/` (append-only).
+| | |
+|---|---|
+| Nodes | 228 |
+| Edges | 1,959 |
+| Papers | 1,548 total · 601 empirical |
+| Temporal range | 1989–2025 |
 
-## parent workspace
+---
 
-The full IDETC26 paper project uses `../README.md` and `../PROJECT.md` at the workspace root — not this file.
+## Node types
 
-## pushing to GitHub
+| Color | Type | Count | Definition |
+|---|---|---|---|
+| Blue | Subjects | 12 | Agents whose behavior the study was designed to observe |
+| Green | Tasks | 70 | Activities the subject performs that the study observes |
+| Amber | Problems | 80 | Design briefs or prompts given to the subject |
+| Purple | Cognitive Constructs | 66 | Cognitive or psychological phenomena the study illuminates |
 
-The git remote for this GUI expects **atlas** files at the **IDETC26 folder root** (historical layout). Before `git push` to `IDETC26-atlas-gui`, copy from this folder to the parent directory:
+---
 
-```bash
-cd /path/to/IDETC26
-cp atlas_gui/PRD.md atlas_gui/export_graph.py atlas_gui/graph_data.json atlas_gui/preview.html .
-cp atlas_gui/README.md README.md
-```
+## How to explore
 
-Then commit and push from `IDETC26` (only those paths are tracked for the atlas remote).  
-Do **not** overwrite parent `PROJECT.md` — it is the full paper `PROJECT.md`.
+- **Click any node** to see its connections and the papers behind them
+- **Search** by node name using the top bar
+- **Filter** by node type using the colored pills
+- **Adjust** the edge weight slider to show only stronger connections
+- **Temporal mode** traces the graph's growth from 1989 to present
+
+---
+
+## Authors
+
+**Caseysimone Ballestas** (PhD Student) and **Dr. Kosa Goucher-Lambert** (Advisor)
+UC Berkeley, Mechanical Engineering
+
+*Working paper under review, ASME IDETC 2026.*
+
+---
+
+## Repository
+
+| File | Description |
+|---|---|
+| `preview.html` | Standalone prototype visualization |
+| `graph_data.json` | Pre-exported graph data |
+| `export_graph.py` | Script that generated the JSON from the underlying database |
+| `PRD.md` | Full product requirements for the visualization |
