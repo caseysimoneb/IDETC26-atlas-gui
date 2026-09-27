@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """One-time export of atlas graph data from SQLite to JSON.
 
-Usage:
-    python export_graph.py
+Usage (needs the Atlas pipeline database, which is not in this repo):
+    ATLAS_DB=/path/to/database.db python export_graph.py
 """
 
 from __future__ import annotations
 
 import json
+import os
 import re
 import sqlite3
 from collections import defaultdict
@@ -18,8 +19,12 @@ from typing import Dict, List, Set, Tuple
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-DB_PATH = (SCRIPT_DIR / "../atlas_pipeline/pipeline_v2/database.db").resolve()
-OUTPUT_PATH = SCRIPT_DIR / "graph_data.json"
+# The pipeline database is not in this repo; ATLAS_DB points to it.
+if not os.environ.get("ATLAS_DB"):
+    raise SystemExit("Set ATLAS_DB to the path of the Atlas pipeline database (database.db).")
+DB_PATH = Path(os.environ["ATLAS_DB"]).expanduser().resolve()
+# Writes the GUI's data file beside this script; ATLAS_GRAPH_OUT overrides it.
+OUTPUT_PATH = Path(os.environ.get("ATLAS_GRAPH_OUT") or SCRIPT_DIR / "graph_data.json").expanduser().resolve()
 
 
 @dataclass(frozen=True)
